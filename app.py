@@ -123,28 +123,5 @@ client1 = paho.Client("sofikings")
 client1.on_message = on_message
 
 # Inicialización de Streamlit
-st.set_page_config(page_title="Interfaces Multimodales", layout="wide")
-st.title("Interfaces Multimodales con Control por Voz")
-st.subheader("Control a través de comandos hablados")
+st
 
-# Imagen de control por voz
-image = Image.open('voice_ctrl.jpg')
-st.image(image, width=200)
-
-# Animación Lottie
-lottie_voice = load_lottieurl("https://assets3.lottiefiles.com/packages/lf20_vwWBt2.json")
-st_lottie(lottie_voice, speed=1, width=300, height=300, key="voice")
-
-# Botón para el reconocimiento de voz
-st.write("Haz clic en el botón y habla")
-stt_button = Button(label="Inicio", width=200)
-stt_button.js_on_event("button_click", CustomJS(code=
-    var recognition = new webkitSpeechRecognition();
-    recognition.continuous = true;
-    recognition.interimResults = true;
- 
-    recognition.onresult = function (e) {
-        var value = "";
-        for (var i = e.resultIndex; i < e.results.length; ++i) {
-            if (e.results[i].isFinal) {
-                value += e
