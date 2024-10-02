@@ -138,7 +138,7 @@ st_lottie(lottie_voice, speed=1, width=300, height=300, key="voice")
 # Botón para el reconocimiento de voz
 st.write("Haz clic en el botón y habla")
 stt_button = Button(label="Inicio", width=200)
-stt_button.js_on_event("button_click", CustomJS(code="""
+stt_button.js_on_event("button_click", CustomJS(code=
     var recognition = new webkitSpeechRecognition();
     recognition.continuous = true;
     recognition.interimResults = true;
