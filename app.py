@@ -123,5 +123,79 @@ client1 = paho.Client("sofikings")
 client1.on_message = on_message
 
 # Inicialización de Streamlit
-st
+st.set_page_config(page_title="Interfaces Multimodales", layout="wide")
+st.title("Interfaces Multimodales con Control por Voz")
+st.subheader("Control a través de comandos hablados")
+
+# Imagen de control por voz
+image = Image.open('voice_ctrl.jpg')
+st.image(image, width=200)
+
+# Animación Lottie
+lottie_voice = load_lottieurl("https://assets3.lottiefiles.com/packages/lf20_vwWBt2.json")
+st_lottie(lottie_voice, speed=1, width=300, height=300, key="voice")
+
+# Botón para el reconocimiento de voz
+st.write("Haz clic en el botón y habla")
+stt_button = Button(label="Inicio", width=200)
+
+# Aquí corregimos el JavaScript insertado en CustomJS
+stt_button.js_on_event("button_click", CustomJS(code="""
+    var recognition = new webkitSpeechRecognition();
+    recognition.continuous = true;
+    recognition.interimResults = true;
+ 
+    recognition.onresult = function (e) {
+        var value = "";
+        for (var i = e.resultIndex; i < e.results.length; ++i) {
+            if (e.results[i].isFinal) {
+                value += e.results[i][0].transcript;
+            }
+        }
+        if (value != "") {
+            document.dispatchEvent(new CustomEvent("GET_TEXT", {detail: value}));
+        }
+    }
+    recognition.start();
+    """))
+
+# Capturar los eventos de voz
+result = streamlit_bokeh_events(
+    stt_button,
+    events="GET_TEXT",
+    key="listen",
+    refresh_on_update=False,
+    override_height=75,
+    debounce_time=0
+)
+
+# Procesamiento de la entrada de voz
+if result:
+    if "GET_TEXT" in result:
+        texto_recibido = result.get("GET_TEXT")
+        st.write("Texto recibido:", texto_recibido)
+        
+        # Publicar texto por MQTT
+        client1.on_publish = on_publish
+        client1.connect(broker, port)
+        message = json.dumps({"Act1": texto_recibido.strip()})
+        ret = client1.publish("control", message)
+        
+        # Traducción al inglés usando Google Translate
+        translator = Translator()
+        texto_traducido = translator.translate(texto_recibido, dest='en').text
+        st.write("Texto traducido:", texto_traducido)
+
+        # Respuesta hablada
+        tts = gTTS(text=texto_traducido, lang='en')
+        tts.save("temp/response.mp3")
+        audio_file = open("temp/response.mp3", "rb")
+        audio_bytes = audio_file.read()
+        st.audio(audio_bytes, format="audio/mp3")
+
+# Crear carpeta temporal si no existe
+try:
+    os.mkdir("temp")
+except FileExistsError:
+    pass
 
