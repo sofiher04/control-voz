@@ -18,13 +18,13 @@ def on_message(client, userdata, message):
     message_received = str(message.payload.decode("utf-8"))
     st.write(message_received)
 
-broker = "broker.mqttdashboard.com"
+broker = "157.230.214.127"
 port = 1883
 client1 = paho.Client("sofikings")
 client1.on_message = on_message
 
-st.title("Interfaces Multimodales")
-st.subheader("CONTROL POR VOZ")
+st.title("Cuida tu planta con Umi")
+st.subheader("Habla para regar o ponerle semillas a tu planta")
 
 # Imagen
 image = Image.open('voice_ctrl.jpg')
