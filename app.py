@@ -27,7 +27,7 @@ st.title("Interfaces Multimodales")
 st.subheader("CONTROL POR VOZ")
 
 # Imagen
-image = Image.open('voice_ctrl.jpg')
+image = Image.open('Bird.png')
 st.image(image, width=200)
 
 # Botón con reconocimiento de voz
