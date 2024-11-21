@@ -27,7 +27,7 @@ st.title("Cuida tu planta con Umi")
 st.subheader("Habla para regar o ponerle semillas a tu planta")
 
 # Imagen
-image = Image.open('Bird.png.jpg')
+image = Image.open('Bird.png')
 st.image(image, width=200)
 
 # Botón con reconocimiento de voz
