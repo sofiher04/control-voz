@@ -20,7 +20,7 @@ def on_message(client, userdata, message):
 
 broker = "157.230.214.127"
 port = 1883
-client1 = paho.Client("sofikings")
+client1 = paho.Client("dani")
 client1.on_message = on_message
 
 st.title("Cuida tu planta con Umi")
@@ -73,7 +73,7 @@ if result and "GET_TEXT" in result:
     client1.on_publish = on_publish
     client1.connect(broker, port)
     message = json.dumps({"Act1": text_input})
-    client1.publish("control", message)
+    client1.publish("voice_ctrlX", message)
 
     # Crear directorio temporal
     os.makedirs("temp", exist_ok=True)
